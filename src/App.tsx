@@ -1,25 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import theme from "./theme";
+import AuthRoute from "./components/AuthRoute";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <AuthProvider>
+          <Router>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <ProtectedRoute
+                path="/dashboard"
+                // redirectPath="/login"
+                component={Dashboard}
+              />
+            </Switch>
+          </Router>
+        </AuthProvider>
+      </CssBaseline>
+    </ThemeProvider>
   );
 }
 
