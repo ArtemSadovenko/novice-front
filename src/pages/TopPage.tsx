@@ -1,12 +1,12 @@
 import React from 'react'
 import withDashboardLayout from '../components/withDashboardLayout'
 
-function Tournaments() {
+function TopPage() {
   return (
     <div>
-      Tournament
+      TOP
     </div>
   )
 }
 
-export default withDashboardLayout(Tournaments) 
+export default withDashboardLayout (TopPage)

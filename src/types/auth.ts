@@ -7,10 +7,11 @@ export interface UserData {
 }
 
 export enum USER_EXPERIENCE {
-  NOVICE,
-  EXPERIENCED,
-  OLD
+  NOVICE = "NOVICE",
+  EXPERIENCED = "EXPERIENCED",
+  OLD = "OLD"
 }
+
 
 
 export enum USER_ROLE {
@@ -44,6 +45,7 @@ export interface AuthContextType {
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<UserData>;
+  register: (data: RegisterRequest) => Promise<boolean>;
   logout: () => void;
   getAuthHeaders: () => Record<string, string>;
   checkAuthStatus: () => void;

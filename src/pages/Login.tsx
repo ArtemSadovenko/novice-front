@@ -1,16 +1,21 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function Login() {
-  const auth = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const auth = useAuth(); const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const history = useHistory();
-
+  const [input, setInput] = useState({
+    email: "",
+    password: ""
+  })
+  const [correctInput, setCorrectInput] = useState({
+    email: true,
+    password: true,
+  })
   const handleLoginClick = () => {
-    auth.login(email, password);
+    auth.login(input.email, input.password);
     history.push("/dashboard")
   };
 
@@ -51,14 +56,14 @@ function Login() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              padding:"30px 20px 30px 20px",
+              padding: "30px 20px 30px 20px",
               flexDirection: "column",
-              bgcolor:'background.paper',
-               
+              bgcolor: 'background.paper',
+
             }}
           >
 
-              <TextField
+            {/* <TextField
                 title="Email"
                 placeholder="Email"
                 onChange={(e) => setEmail(e.target.value)}
@@ -73,12 +78,55 @@ function Login() {
                 sx={{
                     padding:"0px 0px 20px 0px"
                 }}
-              />
-              <Button variant="outlined" onClick={handleLoginClick}
-              sx={{
-                width:"100%"
+              /> */}
+
+            <Typography sx={{ marginBottom: "20px" }}>Sign In</Typography>
+
+            <TextField
+              label="Email"
+
+              placeholder="Email"
+              error={!correctInput.email}
+              onChange={(e) => {
+                setInput(
+                  prev => ({ ...prev, email: e.target.value.trim() })
+                );
+                setCorrectInput(
+                  prev => ({ ...prev, email: emailRegex.test(e.target.value.trim()) })
+                )
               }}
-              >Login</Button>
+              sx={{
+                padding: "0px 0px 20px 0px"
+              }}
+
+            />
+            <TextField
+              label="Password"
+              title="Password"
+              type="password"
+              placeholder="Password"
+              error={!correctInput.password}
+              onChange={(e) => {
+                setInput(
+                  prev => ({ ...prev, password: e.target.value.trim() })
+                );
+                setCorrectInput(
+                  prev => ({ ...prev, password: e.target.value.trim().length > 4 })
+                )
+              }}
+              hidden
+              sx={{
+                padding: "0px 0px 20px 0px"
+              }}
+            />
+            <Button variant="outlined" onClick={handleLoginClick}
+              sx={{
+                width: "100%",
+                marginBottom:"20px"
+              }}
+            >Login</Button>
+
+            <Link to="/register"> Sign Up</Link>
           </Box>
         </Grid>
       </Grid>
