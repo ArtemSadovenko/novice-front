@@ -7,7 +7,7 @@ const theme = createTheme({
       contrastText: '#F1EFEC', // button text on primary
     },
     secondary: {
-      main: '#D4C9BE',
+      main: '#d4cec9',
     },
     background: {
       default: '#F1EFEC',

@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { Box } from "@mui/material";
+import SidePannel from "../components/SidePannel";
+import { Grid } from "@mui/material";
 
 function Dashboard() {
   const auth = useAuth();
 
-  useEffect(() => {});
+  useEffect(() => { });
 
   return (
     <>
-      {auth.loading && !auth.currentUser ? (
-        <p>loading...</p>
-      ) : (
-        <Box>{auth.currentUser?.username}</Box>
-      )}
+      <Grid container>
+        <Grid size={2.5}>
+          <SidePannel />
+        </Grid>
+        <Grid size={9.5}>
+          Dashboard
+          </Grid>
+      </Grid>
+
     </>
   );
 }

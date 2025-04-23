@@ -1,13 +1,15 @@
 import axios from 'axios';
-import { LoginRequest, UserData } from "../types/auth";
+import { LoginRequest, RegisterRequest, UserData } from "../types/auth";
 import { LoginResponse } from "../types/auth";
 
 const BASE_URL= "http://localhost:8500/api/v1"
 
-
+//Login api
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
-    const response = await axios.post<LoginResponse>(`${BASE_URL}/auth/login`, data, {
+    const response = await axios.post<LoginResponse>(
+      `${BASE_URL}/auth/login`,
+      data, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -19,21 +21,19 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
   }
 };
 
-export const getUserById = async (id: string): Promise<UserData> => {
-  const token = localStorage.getItem('token')
-
+export const register = async (data: RegisterRequest): Promise<boolean> => {
   try {
-    const response = await axios.get<UserData>(`${BASE_URL}/user/${id}`,{
+    const response = await axios.post(`${BASE_URL}/auth/register`, data, {
       headers: {
-        "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-  
-    return response.data; 
-  
+    return true; 
   } catch (error) {
-    console.error('User fetch fail: ', error);
-    throw new Error('User fetch fail');
+    console.error('Register failed:', error);
+    throw new Error('Register failed');
   }
 };
+
+
+

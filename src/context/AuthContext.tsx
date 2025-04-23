@@ -2,7 +2,8 @@
   import { createContext, useState, useEffect, useContext, ReactNode, JSX } from 'react';
   import { jwtDecode } from 'jwt-decode';
   import { AuthContextType, AuthTokenPayload, UserData, LoginResponse } from '../types/auth';
-  import { getUserById, login } from '../api/api';
+  import { login } from '../api/authapi';
+  import {getUserById} from "../api/userApi"
   const AuthContext = createContext<AuthContextType | null>(null);
   
   interface AuthProviderProps {
@@ -18,7 +19,6 @@
 
   
     useEffect(() => {
-      // Check for token in localStorage on initial load
       checkAuthStatus();
     }, []);
   
