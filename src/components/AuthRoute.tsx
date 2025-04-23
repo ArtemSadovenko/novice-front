@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Route,
-  Link,
-  useParams,
-  RouteProps,
-  useHistory,
-} from "react-router-dom";
+import { Route, Redirect, RouteProps } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 interface AuthRouteProps extends RouteProps {
@@ -16,11 +10,15 @@ const AuthRoute: React.FC<AuthRouteProps> = ({
   redirectPath = "/dashboard",
   ...routeProps
 }) => {
-  const token = localStorage.getItem("token");
-  const params = useParams();
-  const history = useHistory();
-  if (token) {
-    history.push(redirectPath);
+  const { currentUser, loading } = useAuth();
+  
+  if (loading) {
+    // Show loading state while checking auth
+    return <div>Loading...</div>;
+  }
+  
+  if (currentUser) {
+    return <Redirect to={redirectPath} />;
   }
 
   return <Route {...routeProps} />;

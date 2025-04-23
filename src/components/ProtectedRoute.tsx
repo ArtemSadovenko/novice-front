@@ -10,14 +10,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   redirectPath = "/login",
   ...routeProps
 }) => {
-  const { currentUser } = useAuth();
-  const params = useParams();
+  const { currentUser, loading } = useAuth();
   const history = useHistory()
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
   if (!currentUser) {
     history.push(redirectPath)
   }
 
   return <Route {...routeProps} />;
 };
-
 export default ProtectedRoute;

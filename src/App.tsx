@@ -15,7 +15,7 @@ function App() {
         <AuthProvider>
           <Router>
             <Switch>
-              <Route path="/login" component={Login} />
+              <AuthRoute path="/login" component={Login} />
               <ProtectedRoute
                 path="/dashboard"
                 // redirectPath="/login"

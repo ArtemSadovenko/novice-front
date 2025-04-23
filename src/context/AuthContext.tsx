@@ -22,25 +22,36 @@
       checkAuthStatus();
     }, []);
   
-    const checkAuthStatus = (): void => {
+    const checkAuthStatus = async (): Promise<void> => {
       try {
-        const token = localStorage.getItem('token');
+        const storedToken = localStorage.getItem('token');
         
-        if (!token) {
+        if (!storedToken) {
           setCurrentUser(null);
           setLoading(false);
           return;
         }
-  
+    
         // Verify token hasn't expired
-        const decodedToken = jwtDecode<AuthTokenPayload>(token);
+        const decodedToken = jwtDecode<AuthTokenPayload>(storedToken);
         const currentTime = Date.now() / 1000;
         
         if (decodedToken.exp < currentTime) {
           // Token expired
           logout();
         } else {
-          //TODO fetch user
+          // Set token and id
+          setToken(storedToken);
+          setId(decodedToken.userId);
+          
+          // Fetch user data
+          try {
+            const userData = await getUserById(decodedToken.userId);
+            setCurrentUser(userData);
+          } catch (err) {
+            console.error("Error fetching user data:", err);
+            logout();
+          }
         }
       } catch (err) {
         console.error("Token validation error:", err);
@@ -49,6 +60,7 @@
         setLoading(false);
       }
     };
+    
   
     const loginAuth = async (email: string, password: string): Promise<UserData> => {
       try {
