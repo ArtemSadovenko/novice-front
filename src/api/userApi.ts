@@ -2,13 +2,13 @@ import axios from 'axios';
 import { CreateUserRequest, LoginRequest, RegisterRequest, UpdateUserRequest, UserData } from "../types/auth";
 import { LoginResponse } from "../types/auth";
 
-const BASE_URL = "http://localhost:8500/api/v1/user/"
+const BASE_URL = "http://localhost:8500/api/v1/user"
 const token = localStorage.getItem('token')
 
 export const getUserById = async (id: string): Promise<UserData> => {
 
     try {
-        const response = await axios.get<UserData>(`${BASE_URL}${id}`, {
+        const response = await axios.get<UserData>(`${BASE_URL}/${id}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const deleteUserById = async (id: string):Promise<boolean> => {
     const token = localStorage.getItem('token')
 
     try {
-        const response = await axios.get<UserData>(`${BASE_URL}${id}`, {
+        const response = await axios.get<UserData>(`${BASE_URL}/${id}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ export const getAllUsersPreview = async (): Promise<UserData[]> => {
     const token = localStorage.getItem('token')
 
     try {
-        const response = await axios.get<UserData[]>(`${BASE_URL}all-preview`, {
+        const response = await axios.get<UserData[]>(`${BASE_URL}/all-preview`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',

@@ -1,10 +1,10 @@
 
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { Link, Redirect, useHistory } from "react-router-dom";
-import { RegisterRequest, USER_EXPERIENCE, USER_ROLE } from "../types/auth";
-import { register } from "../api/authapi";
+import { RegisterRequest, USER_EXPERIENCE, USER_ROLE } from "../../types/auth";
+import { register } from "../../api/authapi";
 
 function Register() {
     {

@@ -13,15 +13,16 @@ export interface Tournament {
 }
 
 export enum TOURNAMENT_STATUS{
-    NEW,
-    OPEN,
-    IN_PROGRESS,
-    CLOSED
+    NEW = "NEW",
+    OPEN = "OPEN",
+    IN_PROGRESS = "IN_PROGRESS",
+    CLOSED = "CLOSED",
 }
 
 export interface CreateTournamentRequest{
     name: string
     topics: Record<string, string>
+    judges: UserData[]
 }
 
 export interface UpdateTournamentRequest{

@@ -1,6 +1,6 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 
 function Login() {

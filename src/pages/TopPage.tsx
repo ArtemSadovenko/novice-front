@@ -16,8 +16,6 @@ function TopPage() {
       setUsers(data);
     };
 
-
-
     fetchUsers();
     if (users) {
       setLoading(false)

@@ -5,7 +5,7 @@ import { CreateTournamentRequest, Tournament } from '../types/tournament';
 import { RoundTable } from '../types/room';
 
 
-const BASE_URL = "http://localhost:8500/api/v1/tournament/"
+const BASE_URL = "http://localhost:8500/api/v1/tournament"
 const token = localStorage.getItem('token')
 
 export const createTournament = async (data: CreateTournamentRequest): Promise<Tournament> => {
@@ -61,7 +61,7 @@ export const deleteTournament = async (id: string): Promise<boolean> => {
 export const getTournamentById = async (id: string): Promise<Tournament> => {
     
     try {
-        const response = await axios.get(`${BASE_URL}${id}`, {
+        const response = await axios.get(`${BASE_URL}/${id}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',
