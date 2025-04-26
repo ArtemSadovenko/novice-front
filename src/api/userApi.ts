@@ -29,7 +29,7 @@ export const getAllUsers = async (): Promise<UserData[]> => {
     const token = localStorage.getItem('token')
 
     try {
-        const response = await axios.get<UserData[]>(`${BASE_URL}all`, {
+        const response = await axios.get<UserData[]>(`${BASE_URL}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -105,5 +105,24 @@ export const updateUser = async (data: UpdateUserRequest): Promise<UserData> => 
     } catch (error) {
         console.error('User create fail: ', error);
         throw new Error('User create fail');
+    }
+};
+
+export const getAllUsersPreview = async (): Promise<UserData[]> => {
+    const token = localStorage.getItem('token')
+
+    try {
+        const response = await axios.get<UserData[]>(`${BASE_URL}all-preview`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error('User fetch fail: ', error);
+        throw new Error('User fetch fail');
     }
 };

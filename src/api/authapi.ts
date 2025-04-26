@@ -2,7 +2,7 @@ import axios from 'axios';
 import { LoginRequest, RegisterRequest, UserData } from "../types/auth";
 import { LoginResponse } from "../types/auth";
 
-const BASE_URL= "http://localhost:8500/api/v1"
+const BASE_URL = "http://localhost:8500/api/v1"
 
 //Login api
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {
@@ -14,7 +14,7 @@ export const login = async (data: LoginRequest): Promise<LoginResponse> => {
         'Content-Type': 'application/json',
       },
     });
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error('Login failed:', error);
     throw new Error('Login failed');
@@ -28,7 +28,7 @@ export const register = async (data: RegisterRequest): Promise<boolean> => {
         'Content-Type': 'application/json',
       },
     });
-    return true; 
+    return true;
   } catch (error) {
     console.error('Register failed:', error);
     throw new Error('Register failed');

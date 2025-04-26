@@ -4,6 +4,7 @@ export interface UserData {
   username: string;
   roles: USER_ROLE[];
   experience: USER_EXPERIENCE;
+  averageScore: string;
 }
 
 export enum USER_EXPERIENCE {
@@ -74,4 +75,12 @@ export interface UpdateUserRequest{
   username: string
   experience: USER_EXPERIENCE;
   roles: USER_ROLE[]
+}
+
+export interface UserPreview{
+  id: string;
+  email: string;
+  username: string;
+  experience: USER_EXPERIENCE;
+  averageScore: string;
 }

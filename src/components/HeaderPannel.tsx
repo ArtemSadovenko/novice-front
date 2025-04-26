@@ -2,11 +2,17 @@ import { Box, Button, Typography } from '@mui/material'
 import React from 'react'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '../context/AuthContext';
-function HeaderPannel() {
+import ProfilrIcon from '@mui/icons-material/AccountCircle';
+
+type HeaderPannelProps = {
+    showProfile:boolean
+}
+
+function HeaderPannel(props: HeaderPannelProps) {
     const auth = useAuth()
     return (
         <Box sx={{
-            padding:"3px 3px 0px 3px "
+            padding: "3px 3px 0px 3px "
         }}>
             <Box
                 sx={{
@@ -14,13 +20,15 @@ function HeaderPannel() {
                     justifyContent: "flex-end",
                     alignItems: "center",
                     bgcolor: "secondary.main",
-                    borderRadius:"20px",
+                    borderRadius: "20px",
                     // border: "solid 1px",
                     borderColor: "black",
                     padding: "15px 20px 15px 20px"
                 }}
             >
-                <Typography>Profile</Typography>
+                <Button hidden={props.showProfile} endIcon={<ProfilrIcon />} sx={{
+                    marginRight:"30px"
+                }}>Profile</Button>
                 <Button endIcon={<LogoutIcon />} onClick={auth.logout}>Log out</Button>
             </Box>
         </Box>)

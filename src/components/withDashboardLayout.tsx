@@ -1,9 +1,10 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import SidePannel from "../components/SidePannel";
 import HeaderPannel from "../components/HeaderPannel";
 
-const withDashboardLayout = <P extends object>(Component: React.ComponentType<P>) => {
+
+const withDashboardLayout = <P extends object>(Component: React.ComponentType<P>, showHeader: boolean = true) => {
     return function WrappedWithLayout(props: P) {
         return (
             <>
@@ -12,7 +13,9 @@ const withDashboardLayout = <P extends object>(Component: React.ComponentType<P>
                         <SidePannel />
                     </Grid>
                     <Grid size={9.5}>
-                        <HeaderPannel></HeaderPannel>
+                        <Box>
+                        <HeaderPannel showProfile={showHeader}></HeaderPannel>
+                        </Box>
                         <Component {...props} />
                     </Grid>
                 </Grid>
