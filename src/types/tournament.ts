@@ -6,7 +6,7 @@ export interface Tournament {
     id: string
     name: string
     topics: Record<string, string>
-    teams: Team[] | []
+    teams: Team[] 
     judges: UserData[] 
     roomDetails: RoomDetails[] | []
     tournamentStatus: TOURNAMENT_STATUS

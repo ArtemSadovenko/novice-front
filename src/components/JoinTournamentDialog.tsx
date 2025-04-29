@@ -9,15 +9,17 @@ import { FastForward } from '@mui/icons-material';
 type JoinTournamentDialog = {
     isVisible: boolean;
     users: UserData[];
-    createTeam: (team: CreateTeamRequest) => boolean
+    createTeam: (team: CreateTeamRequest) => void
     tournamentId: string;
+    setIsVisible: (isVisible: boolean) => void
 }
 
 function JoinTournamentDialog({
     isVisible = false,
     users,
     createTeam,
-    tournamentId
+    tournamentId,
+     setIsVisible
 }: JoinTournamentDialog) {
     const auth = useAuth()
     const [team, setTeam] = useState<CreateTeamRequest>({
@@ -64,8 +66,8 @@ function JoinTournamentDialog({
                                 ))}
                             </Select>
                         </FormControl>
-
-                        <Button sx={{ width: "100%" }} variant='contained' onClick={() => {
+                                <Box sx={{display: 'flex', justifyContent:"space-around"}}>
+                        <Button sx={{ width: "45%" }} variant='contained' onClick={() => {
                             try {
                                 if (auth.currentUser) {
                                     team.teamMembers.push(auth.currentUser)
@@ -92,6 +94,8 @@ function JoinTournamentDialog({
                                 })
                             }
                         }}> Confirm</Button>
+                        <Button sx={{ width: "45%" }} variant='contained' onClick={() => setIsVisible(false)}>Close</Button>
+                        </Box>
                     </Box>
                 )}
             </DialogContent>

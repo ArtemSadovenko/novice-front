@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import withDashboardLayout from '../../components/withDashboardLayout'
 import { useParams } from 'react-router-dom';
-import { Tournament } from '../../types/tournament';
+import { Tournament, TOURNAMENT_STATUS } from '../../types/tournament';
 import { getTournamentById } from '../../api/tournamentApi';
 import { Box, Button, CircularProgress, Grid, List, Paper, Typography } from '@mui/material';
 import { UserData, UserPreview } from '../../types/auth';
 import { getAllUsers, getAllUsersPreview } from '../../api/userApi';
 import JoinTournamentDialog from '../../components/JoinTournamentDialog';
-import { CreateTeamRequest, RegisterTeamRequest } from '../../types/team';
+import { CreateTeamRequest, RegisterTeamRequest, Team } from '../../types/team';
 import { useAuth } from '../../context/AuthContext';
 import { registerTeam } from '../../api/teamApi';
 
@@ -40,7 +40,7 @@ function TournamentPage() {
 
   useEffect(() => {
     if (auth.currentUser && tournament && tournament.judges) {
-      setIsJudje(tournament.judges.map(e=> e.id).includes(auth.currentUser.id));
+      setIsJudje(tournament.judges.map(e => e.id).includes(auth.currentUser.id));
 
     }
   }, [tournament])
@@ -66,14 +66,28 @@ function TournamentPage() {
   }, [tournament]);
 
 
-  const createTeam = (team: CreateTeamRequest): boolean => {
+  const createTeam = async (team: CreateTeamRequest) => {
     const request: RegisterTeamRequest = {
       teamMembersIds: team.teamMembers.map(e => e.id),
       name: team.name,
       tournamentId: team.tournamentId
     }
-    registerTeam(request)
-    return true
+    const newTeam: Team = await registerTeam(request)
+    setLoading(true)
+    setTournament(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        teams: [...(prev.teams ?? []), newTeam],
+      };
+    });
+    
+    setLoading(false)
+    setIsDialogVisoble(false)
+  }
+
+  const handleStartTournament = () => {
+
   }
 
   if (loading) {
@@ -101,7 +115,7 @@ function TournamentPage() {
         <Paper elevation={3} sx={{ p: 4 }}>
           <Grid container spacing={3}>
             {loading ? <div>Loading...</div> : (
-              <JoinTournamentDialog createTeam={createTeam} users={users} isVisible={isDialogVisible} tournamentId={tournament.id}></JoinTournamentDialog>
+              <JoinTournamentDialog setIsVisible={setIsDialogVisoble} createTeam={createTeam} users={users} isVisible={isDialogVisible} tournamentId={tournament.id}></JoinTournamentDialog>
             )}
             <Grid size={12} textAlign="center">
               <Typography variant="h4">{tournament.name}</Typography>
@@ -144,23 +158,29 @@ function TournamentPage() {
                 ))}
 
               </List>
+
             </Grid>
-            {isJudge ? (
-              <Grid size={12} >
-                <Button sx={{ width: "100%" }} variant='contained' >Start Tournament</Button>
-              </Grid>
+            {(tournament.tournamentStatus === TOURNAMENT_STATUS.NEW || tournament.tournamentStatus === TOURNAMENT_STATUS.OPEN) ? (
+              isJudge ? (
+                <Grid size={12}>
+                  <Button sx={{ width: "100%" }} onClick={handleStartTournament} variant='contained'>Start Tournament</Button>
+                </Grid>
+              ) : (
+                <Grid size={12}>
+                  <Button sx={{ width: "100%" }} variant='contained' onClick={() => setIsDialogVisoble(true)}>Join</Button>
+                </Grid>
+              )
             ) : (
-              <Grid size={12} >
-                <Button sx={{ width: "100%" }} variant='contained' onClick={() => {
-                  setIsDialogVisoble(true)
-                }}>Join</Button>
+              <Grid size={12}>
+
               </Grid>
             )}
+
 
           </Grid>
         </Paper>
       </Box>
-    </Box>
+    </Box >
   )
 }
 
