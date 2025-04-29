@@ -12,6 +12,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
+import { createTournament } from '../../api/tournamentApi';
+import { useHistory } from 'react-router-dom';
 
 
 
@@ -27,11 +29,6 @@ const MenuProps = {
   },
 };
 
-
-
-
-
-
 function CreateTournament() {
   const [tournament, setTournament] = useState<CreateTournamentRequest>({
     name: '',
@@ -42,23 +39,25 @@ function CreateTournament() {
     name: true,
   })
   const [newTopic, setNewTopic] = useState('');
+  const history = useHistory()
 
   const [users, setUsers] = useState<UserData[]>([]);
 
+  const [buttonLoading, setButtonLoading] = useState(false)
 
-  const handleChange = (event: SelectChangeEvent<string[]>) => {
+  const handleChange = (event: SelectChangeEvent<UserData[]>) => {
     const {
       target: { value },
     } = event;
-    const selectedUsernames = typeof value === 'string' ? value.split(',') : value;
 
-    const selectedUsers = users.filter(user => selectedUsernames.includes(user.username));
+    const selectedUsers = value as unknown as UserData[];
 
     setTournament(prev => ({
       ...prev,
-      judges: selectedUsers
+      judges: selectedUsers,
     }));
   };
+
 
 
 
@@ -167,15 +166,26 @@ function CreateTournament() {
               labelId="judge-select-label"
               id="judge-select"
               multiple
-              value={tournament.judges.map(j => j.username)}
-              onChange={handleChange}
-              input={<OutlinedInput id="select-multiple-chip" label="judges" />}
+              value={tournament.judges.map(judge => judge.id)}
+              onChange={(e) => {
+                const selectedIds = e.target.value as string[];
+                const selectedUsers = selectedIds.map(id =>
+                  users.find(user => user.id === id)
+                ).filter((user): user is UserData => user !== undefined);
+
+                setTournament(prev => ({
+                  ...prev,
+                  judges: selectedUsers,
+                }));
+              }}
+              input={<OutlinedInput id="select-multiple-chip" label="Judges" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                  {selected.map((username) => (
+                  {tournament.judges.map((judge) => (
                     <Chip
-                      key={username}
-                      label={username}
+                      key={judge.id}
+                      label={judge.username}
+
                     />
                   ))}
                 </Box>
@@ -183,15 +193,27 @@ function CreateTournament() {
               MenuProps={MenuProps}
             >
               {users.map((user) => (
-                <MenuItem key={user.id} value={user.username}>
+                <MenuItem key={user.id} value={user.id}>
                   {user.username}
                 </MenuItem>
               ))}
             </Select>
-
           </FormControl>
 
 
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={tournament.name.length < 3 || Object.keys(tournament.topics).length === 0 || tournament.judges.length === 0}
+            onClick={() => {
+              setButtonLoading(true)
+              createTournament(tournament)
+              history.push("/tournaments")
+            }}
+            loading={buttonLoading}
+          >
+            Create Tournament
+          </Button>
 
         </Box>
       </Box>

@@ -6,9 +6,9 @@ import { Box } from '@mui/material'
 import ToplistUserPreview from '../components/ToplistUserPreview'
 
 function TopPage() {
-  const [users, setUsers] = useState<UserPreview[]>([])
-  const [loading, setLoading] = useState(true)
 
+  const [loading, setLoading] = useState(true)
+  const [users, setUsers] = useState<UserPreview[]>([])
   useEffect(() => {
     const fetchUsers = async () => {
       const data: UserPreview[] = await getAllUsersPreview();
