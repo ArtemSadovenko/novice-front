@@ -19,6 +19,7 @@ function TournamentPage() {
   const [users, setUsers] = useState<UserData[]>([])
   const auth = useAuth()
   const [isDialogVisible, setIsDialogVisoble] = useState(false)
+  const [isJudge, setIsJudje] = useState(false)
 
   useEffect(() => {
     const fetchtournament = async () => {
@@ -36,6 +37,13 @@ function TournamentPage() {
     };
     fetchtournament();
   }, [id]);
+
+  useEffect(() => {
+    if (auth.currentUser && tournament && tournament.judges) {
+      setIsJudje(tournament.judges.map(e=> e.id).includes(auth.currentUser.id));
+
+    }
+  }, [tournament])
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -124,7 +132,7 @@ function TournamentPage() {
               <List>
                 {tournament.teams.map((team, i) => (
                   <Grid container key={i} spacing={1}>
-                    <Grid  size={4}>
+                    <Grid size={4}>
                       {team.name}
                     </Grid>
                     {team.teamMembers.map(e => (
@@ -137,11 +145,17 @@ function TournamentPage() {
 
               </List>
             </Grid>
-            <Grid size={12} >
-              <Button sx={{ width: "100%" }} variant='contained' onClick={() => {
-                setIsDialogVisoble(true)
-              }}>Join</Button>
-            </Grid>
+            {isJudge ? (
+              <Grid size={12} >
+                <Button sx={{ width: "100%" }} variant='contained' >Start Tournament</Button>
+              </Grid>
+            ) : (
+              <Grid size={12} >
+                <Button sx={{ width: "100%" }} variant='contained' onClick={() => {
+                  setIsDialogVisoble(true)
+                }}>Join</Button>
+              </Grid>
+            )}
 
           </Grid>
         </Paper>

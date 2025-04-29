@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Typography, Chip, Box, Button } from '@mui/material';
 import { Tournament, TOURNAMENT_STATUS } from '../types/tournament';
 import { useHistory } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface TournamentViewProps {
   tournament: Tournament;
@@ -9,6 +10,7 @@ interface TournamentViewProps {
 
 const TournamentView: React.FC<TournamentViewProps> = ({ tournament }) => {
   const history = useHistory();
+  const auth = useAuth()
 
   const getStatusColor = (status: TOURNAMENT_STATUS) => {
     switch (status) {
@@ -45,11 +47,11 @@ const TournamentView: React.FC<TournamentViewProps> = ({ tournament }) => {
   };
 
   return (
-    <Paper 
-      elevation={3} 
-      sx={{ 
-        p: 3, 
-        mb: 2, 
+    <Paper
+      elevation={3}
+      sx={{
+        p: 3,
+        mb: 2,
         borderRadius: '10px',
         transition: 'transform 0.2s ease-in-out',
         '&:hover': {
@@ -62,11 +64,21 @@ const TournamentView: React.FC<TournamentViewProps> = ({ tournament }) => {
         <Typography variant="h5" component="h2" sx={{ fontWeight: 'bold' }}>
           {tournament.name}
         </Typography>
-        <Chip 
-          label={getStatusLabel(tournament.tournamentStatus)} 
+      <Box sx={{
+        height:"30px",
+
+      }}>
+        {
+          auth.currentUser ?
+            tournament.judges.map(e => e.id).includes(auth.currentUser.id) ? <Chip sx={{marginRight:"8px", height:"100%"}} size="small" label="Judge" /> : null : null
+        }
+        <Chip
+        sx={{height:"100%"}}
+          label={getStatusLabel(tournament.tournamentStatus)}
           color={getStatusColor(tournament.tournamentStatus) as any}
-          size="small"
+
         />
+        </Box>
       </Box>
 
       <Box sx={{ mb: 2 }}>
@@ -82,9 +94,9 @@ const TournamentView: React.FC<TournamentViewProps> = ({ tournament }) => {
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button 
-          variant="contained" 
-          color="primary" 
+        <Button
+          variant="contained"
+          color="primary"
           size="small"
           onClick={handleViewDetails}
         >
