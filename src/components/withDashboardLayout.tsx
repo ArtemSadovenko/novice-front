@@ -4,7 +4,7 @@ import SidePannel from "../components/SidePannel";
 import HeaderPannel from "../components/HeaderPannel";
 
 
-const withDashboardLayout = <P extends object>(Component: React.ComponentType<P>, showHeader: boolean = true) => {
+const withDashboardLayout = <P extends object>(Component: React.ComponentType<P>, showHeader: boolean = true ) => {
     return function WrappedWithLayout(props: P) {
         return (
             <>

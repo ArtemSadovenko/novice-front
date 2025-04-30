@@ -39,6 +39,13 @@ export interface RoundResults {
     team: Team
 }
 
+export interface CreateRoundResultsRequest {
+    place: PLACE
+    speakerPoints: Record<string, string>
+    roomDetailsId: string
+    team: Team
+}
+
 
 export enum PLACE {
     FIRST,
@@ -68,4 +75,12 @@ export interface CreateRoomDetailsResponse {
     judges?: UserData[]
     positions?: RoomPosition[]
     results?: RoundResults[]
+}
+
+export interface RoomPreview {
+    id: string
+    roundNumber: string
+    roomName: string
+    tournamentId: string
+    tournamentName: string
 }

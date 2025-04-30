@@ -13,6 +13,7 @@ import { registerTeam } from '../../api/teamApi';
 import { RoundTable } from '../../types/room';
 import RoundTableView from '../../components/Table';
 import { tab } from '@testing-library/user-event/dist/tab';
+import { ROUND_STATUS } from '../../types/roomdetails';
 
 function TournamentPage() {
   const { id } = useParams<{ id: string }>();
@@ -26,35 +27,23 @@ function TournamentPage() {
   const [table, setTable] = useState<RoundTable>()
 
   useEffect(() => {
-    const fetchtournament = async () => {
-      if (!id) return;
-
-      try {
-        setLoading(true);
-        const data = await getTournamentById(id);
-        setTournament(data);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load tournament data');
-        console.error(err);
-      }
-    };
+    
     fetchtournament();
   }, [id]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchTable = async () => {
       setLoading(true)
-      if(tournament && tournament.roomDetails.length != 0 && !table){
-        const roundNumber = Math.max(...tournament.roomDetails.map(e => parseInt(e.roundNumber))) 
+      if (tournament && tournament.roomDetails.length != 0 && !table) {
+        const roundNumber = Math.max(...tournament.roomDetails.map(e => parseInt(e.roundNumber)))
         const table = await getRoundTable(tournament.id, roundNumber);
         setTable(table)
       }
       setLoading(false)
     }
     fetchTable()
-        
-  },[tournament])
+
+  }, [tournament])
 
   useEffect(() => {
     if (auth.currentUser && tournament && tournament.judges) {
@@ -83,6 +72,19 @@ function TournamentPage() {
     fetchUsers();
   }, [tournament]);
 
+  const fetchtournament = async () => {
+    if (!id) return;
+
+    try {
+      setLoading(true);
+      const data = await getTournamentById(id);
+      setTournament(data);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load tournament data');
+      console.error(err);
+    }
+  };
 
   const createTeam = async (team: CreateTeamRequest) => {
     const request: RegisterTeamRequest = {
@@ -112,6 +114,17 @@ function TournamentPage() {
     }
     setLoading(false)
   }
+
+  const handleStartNextRoundClicked = async () => {
+    if (tournament?.id) {
+      setLoading(true);
+      const rooms = await genarateRooms(tournament.id);
+      setTable(rooms);
+      fetchtournament()
+      setLoading(false);
+    }
+  };
+
 
   if (loading) {
     return (
@@ -201,6 +214,16 @@ function TournamentPage() {
               </Grid>
             )}
 
+            {tournament.tournamentStatus == TOURNAMENT_STATUS.IN_PROGRESS
+              && tournament.roomDetails
+                .filter(e => e.roundStatus == ROUND_STATUS.COMPLETED)
+                .length == 0 ?
+              (
+                <Grid size={12}>
+                  <Button sx={{ width: "100%" }} variant='contained' onClick={handleStartNextRoundClicked}>Start Next Round</Button>
+                </Grid>
+              )
+              : null}
 
           </Grid>
         </Paper>
