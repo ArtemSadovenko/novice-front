@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import withDashboardLayout from '../../components/withDashboardLayout'
 import { useParams } from 'react-router-dom';
 import { Tournament, TOURNAMENT_STATUS } from '../../types/tournament';
-import { getTournamentById } from '../../api/tournamentApi';
+import { genarateRooms, getRoundTable, getTournamentById } from '../../api/tournamentApi';
 import { Box, Button, CircularProgress, Grid, List, Paper, Typography } from '@mui/material';
 import { UserData, UserPreview } from '../../types/auth';
 import { getAllUsers, getAllUsersPreview } from '../../api/userApi';
@@ -10,6 +10,9 @@ import JoinTournamentDialog from '../../components/JoinTournamentDialog';
 import { CreateTeamRequest, RegisterTeamRequest, Team } from '../../types/team';
 import { useAuth } from '../../context/AuthContext';
 import { registerTeam } from '../../api/teamApi';
+import { RoundTable } from '../../types/room';
+import RoundTableView from '../../components/Table';
+import { tab } from '@testing-library/user-event/dist/tab';
 
 function TournamentPage() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +23,7 @@ function TournamentPage() {
   const auth = useAuth()
   const [isDialogVisible, setIsDialogVisoble] = useState(false)
   const [isJudge, setIsJudje] = useState(false)
+  const [table, setTable] = useState<RoundTable>()
 
   useEffect(() => {
     const fetchtournament = async () => {
@@ -37,6 +41,20 @@ function TournamentPage() {
     };
     fetchtournament();
   }, [id]);
+
+  useEffect(()=>{
+    const fetchTable = async () => {
+      setLoading(true)
+      if(tournament && tournament.roomDetails.length != 0 && !table){
+        const roundNumber = Math.max(...tournament.roomDetails.map(e => parseInt(e.roundNumber))) 
+        const table = await getRoundTable(tournament.id, roundNumber);
+        setTable(table)
+      }
+      setLoading(false)
+    }
+    fetchTable()
+        
+  },[tournament])
 
   useEffect(() => {
     if (auth.currentUser && tournament && tournament.judges) {
@@ -81,13 +99,18 @@ function TournamentPage() {
         teams: [...(prev.teams ?? []), newTeam],
       };
     });
-    
+
     setLoading(false)
     setIsDialogVisoble(false)
   }
 
-  const handleStartTournament = () => {
-
+  const handleStartTournament = async () => {
+    setLoading(true)
+    if (tournament && tournament.id) {
+      const rooms = await genarateRooms(tournament.id)
+      setTable(rooms)
+    }
+    setLoading(false)
   }
 
   if (loading) {
@@ -172,7 +195,9 @@ function TournamentPage() {
               )
             ) : (
               <Grid size={12}>
-
+                {table ? (
+                  <RoundTableView tableData={table} />
+                ) : null}
               </Grid>
             )}
 

@@ -9,7 +9,7 @@ const BASE_URL = "http://localhost:8500/api/v1/tournament"
 const token = localStorage.getItem('token')
 
 export const createTournament = async (data: CreateTournamentRequest): Promise<Tournament> => {
-   
+
     try {
         const response = await axios.post(`${BASE_URL}`, data, {
             headers: {
@@ -26,7 +26,7 @@ export const createTournament = async (data: CreateTournamentRequest): Promise<T
 
 
 export const updateTournament = async (data: CreateTournamentRequest): Promise<Tournament> => {
-    
+
     try {
         const response = await axios.put(`${BASE_URL}`, data, {
             headers: {
@@ -43,7 +43,7 @@ export const updateTournament = async (data: CreateTournamentRequest): Promise<T
 
 
 export const deleteTournament = async (id: string): Promise<boolean> => {
-    
+
     try {
         const response = await axios.delete(`${BASE_URL}${id}`, {
             headers: {
@@ -59,7 +59,7 @@ export const deleteTournament = async (id: string): Promise<boolean> => {
 }
 
 export const getTournamentById = async (id: string): Promise<Tournament> => {
-    
+
     try {
         const response = await axios.get(`${BASE_URL}/${id}`, {
             headers: {
@@ -75,7 +75,7 @@ export const getTournamentById = async (id: string): Promise<Tournament> => {
 }
 
 export const getAllTournament = async (): Promise<Tournament[]> => {
-    
+
     try {
         const response = await axios.get(`${BASE_URL}`, {
             headers: {
@@ -90,9 +90,10 @@ export const getAllTournament = async (): Promise<Tournament[]> => {
     }
 }
 
-export const genarateRooms = async(id: string): Promise<RoundTable> => {
+export const genarateRooms = async (id: string): Promise<RoundTable> => {
     try {
-        const response = await axios.post(`${BASE_URL}${id}/generate-rooms`, {
+        const response = await axios.post(`${BASE_URL}/${id}/generate-rooms`, {}, {
+
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -105,9 +106,9 @@ export const genarateRooms = async(id: string): Promise<RoundTable> => {
     }
 }
 
-export const getRoundTable = async(id: string, roundNumber: number): Promise<RoundTable> => {
+export const getRoundTable = async (id: string, roundNumber: number): Promise<RoundTable> => {
     try {
-        const response = await axios.get(`${BASE_URL}${id}/${roundNumber}`, {
+        const response = await axios.get(`${BASE_URL}/${id}/${roundNumber}`, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json',

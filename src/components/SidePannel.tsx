@@ -1,12 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, IconButton } from "@mui/material";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CupIcon from '@mui/icons-material/EmojiEvents';
 import TopIcon from '@mui/icons-material/WorkspacePremium';
 import { useHistory } from 'react-router-dom';
+import { getJudgeAllRoomDetails } from '../api/roomApi';
+import { RoomDetails } from '../types/roomdetails';
+import GavelIcon from '@mui/icons-material/Gavel';
 
 function SidePannel() {
     const history = useHistory();
+    const [isJudge, setIsJudje] = useState(false)
+    const [rooms, setRooms] = useState<RoomDetails[]>()
+    const [loading, setLoading] = useState(true)
+
+
+    useEffect(() => {
+        const fetchJudgeRooms = async () => {
+            const data = await getJudgeAllRoomDetails()
+            if (data) {
+                setRooms(data)
+                if (data.length != 0) {
+                    setIsJudje(true)
+                }
+                setLoading(false)
+            }
+        }
+        fetchJudgeRooms()
+    }, [])
 
     return (
         <>
@@ -52,6 +73,18 @@ function SidePannel() {
                             padding: "20px 0px  20px 0px"
                         }}
                         startIcon={<TopIcon />}>Top players</Button>
+
+                    {!loading && isJudge ? (
+                        <Button
+                            onClick={() => {
+                                history.push("/judge-rooms")
+                            }}
+                            sx={{
+                                padding: "20px 0px  20px 0px"
+                            }}
+                            startIcon={<GavelIcon />}>My rooms</Button>
+
+                    ) : null}
                 </Box>
             </Box>
         </>

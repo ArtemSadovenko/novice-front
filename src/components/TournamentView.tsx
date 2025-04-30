@@ -66,11 +66,11 @@ const TournamentView: React.FC<TournamentViewProps> = ({ tournament }) => {
         </Typography>
       <Box sx={{
         height:"30px",
-
+        justifyContent:"flex-end"
       }}>
         {
           auth.currentUser ?
-            tournament.judges.map(e => e.id).includes(auth.currentUser.id) ? <Chip sx={{marginRight:"8px", height:"100%"}} size="small" label="Judge" /> : null : null
+            tournament.judges.map(e => e.id).includes(auth.currentUser.id) ? <Chip sx={{ height:"100%"}} size="small" label="Judge" /> : null : null
         }
         <Chip
         sx={{height:"100%"}}

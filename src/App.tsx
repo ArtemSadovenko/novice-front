@@ -14,6 +14,10 @@ import UserProfile from "./pages/profile/UserProfile";
 import CreateTournament from "./pages/tournament/CreateTournament";
 import TournamentPage from "./pages/tournament/TournamentPage";
 import SelfProfile from "./pages/profile/SelfProfile";
+import JudgeRoute from "./components/JudgeRoute";
+import JudgeRooms from "./pages/room/JudgeRooms";
+import ResponsibleJudgeRoute from "./components/ResponsibleJudjeRoute";
+import JudgeRoom from "./pages/room/JudgeRoom";
 
 function App() {
   return (
@@ -36,7 +40,7 @@ function App() {
                 path="/toplist"
                 component={TopPage}
               />
-                            <ProtectedRoute
+              <ProtectedRoute
                 path="/tournament/create"
                 component={CreateTournament}
               />
@@ -48,14 +52,21 @@ function App() {
                 path="/tournaments"
                 component={Tournaments}
               />
-                            <ProtectedRoute
+              <ProtectedRoute
                 path="/profile"
                 component={SelfProfile}
               />
-                            <ProtectedRoute
+              <ProtectedRoute
                 path="/user/:id"
                 component={UserProfile}
               />
+
+              <JudgeRoute
+                path="/judge-rooms"
+                component={JudgeRooms} />
+              <ResponsibleJudgeRoute
+                path="/room/judge/:id"
+                component={JudgeRoom} />
             </Switch>
           </Router>
         </AuthProvider>
