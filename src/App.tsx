@@ -64,9 +64,10 @@ function App() {
               <JudgeRoute
                 path="/judge-rooms"
                 component={JudgeRooms} />
-              <ResponsibleJudgeRoute
+              <Route
                 path="/room/judge/:id"
-                component={JudgeRoom} />
+                render={(props) => <ResponsibleJudgeRoute {...props} component={JudgeRoom} />}
+              />
             </Switch>
           </Router>
         </AuthProvider>

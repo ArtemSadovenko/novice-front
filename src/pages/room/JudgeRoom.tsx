@@ -7,12 +7,15 @@ import withDashboardLayout from '../../components/withDashboardLayout'
 
 function JudgeRoom() {
   const { id } = useParams<{ id: string }>()
-  const [loadong, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [room, setRoom] = useState<RoomDetails>()
 
   useEffect(() => {
     const fetchRoom = async () => {
-      const data = await getRoomDetailsById(id)
+      let data = null
+      if (id) {
+         data = await getRoomDetailsById(id)
+      }
       if (data) {
         setRoom(data)
         setLoading(false)
@@ -24,9 +27,9 @@ function JudgeRoom() {
 
   return (
     <>
-      {room && !loadong ? (
+      {room && !loading ? (
         <>
-          
+
         </>
       ) : (
         <div>Loading...</div>)}
@@ -34,4 +37,4 @@ function JudgeRoom() {
   )
 }
 
-export default withDashboardLayout( JudgeRoom)
+export default withDashboardLayout(JudgeRoom)

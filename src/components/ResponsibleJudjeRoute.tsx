@@ -12,7 +12,7 @@ const ResponsibleJudgeRoute: React.FC<ResponsibleJudgeRouteProps> = ({
     redirectPath = "/dashboard",
     ...routeProps
 }) => {
-    const {currentUser} = useAuth()
+    const { currentUser } = useAuth()
     const { id } = useParams<{ id: string }>();
     const [isJudge, setIsJudje] = useState(false)
     const [rooms, setRooms] = useState<RoomDetails>()
@@ -31,7 +31,7 @@ const ResponsibleJudgeRoute: React.FC<ResponsibleJudgeRouteProps> = ({
             }
         }
         fetchJudgeRooms()
-    }, [])
+    }, [currentUser])
 
     if (loading) {
 
